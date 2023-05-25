@@ -1,0 +1,108 @@
+<div class="container">
+  <div class="sclass-container">
+    <div class="selector-div">
+     <label style="text-align: left" for="class-selector">Osztály:</label>
+     <select [(ngModel)]="currentSclassName" id="class-selector" (ngModelChange)="filterByClass()">
+       <option [value]="" selected></option>
+       <option *ngFor="let className of currentYearSclassNames" [value]="className">
+         {{ className }}
+       </option>
+       <option>null</option>
+
+     </select>
+    </div>
+    <div class="sclass-buttons btn-group-sm">
+      <select [(ngModel)]="currentYear" id="year-selector" (ngModelChange)="filterClassesByYear()">
+        <option [value]="" disabled selected>Évfolyam</option>
+        <option *ngFor="let num of Array.of(1,2,3,4,5,6,7,8)" [value]="num">
+          {{ num }}
+        </option>
+      </select>
+      <button type="button" class="btn btn-success" [disabled]="currentYear == null || !adminAccess()"
+              appButtonHover [highlightColor]="'#82e0aa'" (click)="addNewClass()">Hozzáadás</button>
+      <button type="button" class="btn btn-danger" [disabled]="currentSclassName === 'null' ||
+       currentSclassName === '' || currentSclassName == null || !adminAccess()" appButtonHover [highlightColor]="'#f5b7b1'" (click)="removeClass()">Törlés</button>
+    </div>
+  </div>
+
+  <div class="search-div">
+   <div class="search-box">
+    <input class="search" placeholder="Search..." [(ngModel)]="name" (ngModelChange)="searchByName()">
+    <button class="search-button" type="submit">
+      <i class="fa fa-search"></i></button>
+   </div>
+  </div>
+
+  <div class="pagination-container">
+    <pagination-controls style=""
+      previousLabel="Prev"
+      nextLabel="Next"
+      [responsive]="true"
+      (pageChange)="handlePageChange($event)"
+    ></pagination-controls>
+  </div>
+
+  <div class="title-div">
+    <a class="students-title">Tanulók listája</a>
+
+    <div class="sizelength-div">
+      <label style="font-weight: 750" for="pagesize-selector">Tanuló/oldal:</label>
+      <input type="number" id="pagesize-selector" [(ngModel)]="size" (ngModelChange)="handleSizeChange($event)">
+    </div>
+  </div>
+
+
+  <div class="student-container">
+    <table class="table table-bordered">
+      <thead style="background-color: darkblue; color: white">
+       <tr>
+        <th class="text-center">Név</th>
+        <th class="text-center">Szül. dátum</th>
+        <th class="text-center">Lakcím</th>
+        <th class="text-center">Műveletek</th>
+       </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let student of students | paginate : {itemsPerPage: size,
+                  currentPage: page,
+                  totalItems: count}">
+        <td class="">{{student.name}}</td>
+        <td>{{student.birth | date: 'yyyy-MM-dd'}}</td>
+        <td>{{student.address}}</td>
+        <td class="btn-group-sm text-center">
+          <button class="btn btn-success mx-1 my-1" (click)="openForm('add',student)"
+          [disabled]="!adminAccess()"><i class="fa fa-plus"></i></button>
+          <button class="btn btn-danger mx-1 my-1" (click)="removeStudent(student)"
+          [disabled]="!adminAccess()"><i class="fa fa-trash"></i></button>
+          <button class="btn btn-warning mx-1 my-1" (click)="openForm('update',student)"
+          [disabled]="!classHeadAccess(currentSclassName)"><i class="fa fa-refresh"></i></button>
+          <button class="btn btn-info mx-1 my-1" (click)="openForm('read',student)"
+          [disabled]="!parentAccess(student.name)"><i class="fa fa-info"></i></button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="crud-container btn-group-sm text-center" >
+    <button class="btn btn-success mx-2 my-2" [disabled]="!adminAccess()"
+            appButtonHover [highlightColor]="'#82e0aa'" (click)="openForm('add',emptyStudent)">Új tanuló</button>
+    <button class="btn btn-dark my-2" [disabled]="!adminAccess()"
+            appButtonHover [highlightColor]="'#9a9a9a'" (click)="removeAllStudents()">Összes törlése</button>
+  </div>
+
+  <div class="overlap" *ngIf="crudMode"></div>
+
+  <div class="details-container" *ngIf="crudMode">
+    <app-student-details
+      [operation]="crudOperation"
+      [index]="currentIndex"
+      (formClose)="crudMode = false"
+      (crudDone)="crudMode = false; messageText = $event; messageMode=true"></app-student-details>
+  </div>
+
+  <div class="message-container" *ngIf="messageMode">
+    <app-student-message [message]="messageText"
+    (messageClose)="messageMode = false; refreshList()"></app-student-message>
+  </div>
+</div>

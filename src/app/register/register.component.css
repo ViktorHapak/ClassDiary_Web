@@ -1,0 +1,131 @@
+.form-container{
+  margin: 30px auto;
+  background-color: white;
+  max-width: 80%;
+  width: 600px;
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.9) !important;
+}
+
+.title{
+  display: flex;
+  width: 100%;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+}
+
+.title a{
+  display: block;
+  background: lightgray;
+  padding: 2px 6px;
+  font-family: "Arial", Helvetica, serif;;
+}
+
+.controls{
+  width: 100%;
+
+}
+
+.control-div{
+  display: inline-flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  width: 50%;
+}
+
+.control-div *{
+  width: 100%;
+}
+
+.control-div input, textarea{
+  background-color: #f1fcfc;
+  border: 0.1px solid gray;
+}
+
+.control-div input:focus, textarea:focus{
+  outline: none;
+  box-shadow: 0 0 2px gray !important;
+  border: 0.1px solid gray;
+}
+
+.control-div input:hover, textarea:hover{
+  box-shadow: 0 0 2px rgba(0, 0, 255, 2) !important;
+  border: 0.1px solid blue;
+}
+
+.control-div small{
+  height: 30px;
+  min-height: 30px;
+  max-height: 30px;
+  margin-bottom: 10px;
+}
+
+
+.btn{
+  display: block;
+  margin: 20px auto;
+  width: 50%;
+  cursor: pointer;
+}
+
+.input:active{
+  border-color: blue;
+}
+
+.alert-danger{
+  margin-left: 5%;
+  width: 90%;
+}
+
+.input[type="date"] {
+  appearance: none;
+}
+
+.input[type="date"]::-webkit-calendar-picker-indicator {
+  background: url('https://cdn-icons-png.flaticon.com/512/1827/1827933.png') no-repeat;
+  background-size: 20px;
+  cursor: pointer;
+  padding-right: 10px;
+}
+
+
+select option {
+  padding: 10px;
+  font-size: 16px;
+  background-color: white;
+  color: black;
+  overflow-y: scroll;
+}
+
+select option:checked {
+  background-color: darkgray;
+  color: white;
+}
+
+select[multiple]{
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.alert-danger{
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 750px) {
+
+  .form-container{
+    width: 80%;
+  }
+
+}
+
+
+

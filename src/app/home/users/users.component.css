@@ -1,0 +1,361 @@
+.container{
+  margin: 30px auto;
+  width: 70%;
+}
+
+.pagination-div{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 10px;
+  padding: 5px;
+  background-color: #e3f9fc;
+}
+
+.page-controls{
+  width: auto;
+  height: auto;
+  font-weight: 500;
+}
+
+.sizelength-div{
+  display: inline-flex;
+  float: right;
+  align-items: center;
+  font-size: 12px;
+  margin-right: 20px;
+}
+
+#pagesize-selector{
+  width: 40px;
+  max-height: 20px;
+  margin-left: 3px;
+  background-color: #f1fcfc;
+  border: 0.1px solid gray;
+}
+
+#pagesize-selector:focus{
+  outline: none;
+  box-shadow: 0 0 2px gray !important;
+  border: 0.1px solid gray;
+}
+
+#pagesize-selector:hover{
+  outline: none;
+  box-shadow: 0 0 2px rgba(0, 0, 255, 2) !important;
+  border: 0.1px solid blue;
+}
+
+.data-div{
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: space-between;
+}
+
+.users-div{
+  width: 45%;
+  padding: 10px 20px;
+}
+
+.info-div{
+  width: 55%;
+}
+
+.users-table{
+  width: 100%;
+}
+
+.users-table thead{
+  background-color: darkblue;
+  font-weight: 500;
+  font-size: 16px;
+  color: white;
+  height: 40px;
+  text-align: center;
+}
+
+.users-table thead tr th:first-child {
+  border-radius: 1rem 0 0 0;
+}
+
+.users-table thead tr th:last-child {
+  border-radius: 0 1rem 0 0;
+}
+
+tbody, thead, tr{
+  width: 100%;
+}
+
+.name-th, .name-td{
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.operations-td, .operations-th{
+  width: auto;
+  display: flex;
+}
+
+.name-td, .operations-td{
+  background-color: white;
+  border: 0.2px solid lightgray;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.operations-td .btn{
+  min-width: 35px;
+}
+
+
+.title-div{
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  width: auto;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  cursor: alias;
+}
+
+.title-div h3{
+  display: block;
+  width: auto;
+}
+
+.title-div h3:before{
+  content:' ';
+  width: 1%;
+  height: 1px;
+  background: transparent;
+  display: block;
+  margin: auto;
+  transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.title-div h3:hover:before{
+  width: 100%;
+  background: black;
+}
+
+.crud-container{
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.search-div {
+  width: 80%;
+  margin-left: 10%;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-div *{
+  height: 40px;
+}
+
+.search-div input[type="text"]{
+  padding-left: 10px;
+  width: 80%;
+}
+
+.search-div input{
+  background-color: #f1fcfc;
+  border: 0.1px solid gray;
+  outline: none;
+}
+
+.search-div input:focus{
+  outline: none;
+  box-shadow: 0 0 2px gray !important;
+  border: 0.1px solid gray;
+}
+
+.search-div input:hover{
+  box-shadow: 0 0 2px greenyellow !important;
+  border: 0.1px solid greenyellow;
+}
+
+.search-div button{
+  padding-left: 30px;
+  padding-right: 30px;
+  max-width: 20%;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.roles-div{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  font-weight: 700;
+}
+
+.roles-div div{
+  display: flex;
+  justify-content: flex-start;
+  width: auto;
+}
+
+.roles-div input[type="radio"]{
+  margin-right: 5px;
+}
+
+.current-div{
+  display: block;
+  background-color: #e8fbfb;
+  padding: 10px;
+  margin-left: 20%;
+  width: 60%;
+}
+
+.current-data-div{
+  display: block;
+  max-height: 110px;
+  padding: 10px;
+  margin-bottom: 10px;
+  overflow-y: scroll;
+  width: 100%;
+}
+
+.current-div a{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+.current-div a label{
+  text-align: left;
+  margin-right: 10px;
+}
+
+.refresh-div{
+  padding-right: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.refresh-div .btn{
+  width: 50%;
+}
+
+.details-container{
+  width: 80%;
+  left: 10%;
+  right: 10%;
+}
+
+.message-container{
+  position: absolute;
+  top: 15px;
+  right: 30px;
+  z-index: 5;
+}
+
+.details-container{
+  position: fixed;
+  top: 5%;
+  left: 25%;
+  width: 50%;
+  height: 80%;
+  z-index: 6;
+}
+
+.overlap{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  z-index: 5;
+}
+
+
+.message-container{
+  position: absolute;
+  top: 15px;
+  right: 30px;
+  z-index: 5;
+}
+
+@media(min-width: 930px){
+  .details-container{
+    width: 40%;
+    left: 30%;
+  }
+}
+
+@media(max-width: 800px) {
+  .data-div{
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+  }
+
+  .data-div *{
+    width: 100%;
+    left: 0;
+  }
+
+  .search-div, .roles-div, .current-div{
+    margin-left: 0;
+  }
+
+  .current-div a{
+    width: 100%;
+  }
+
+  .current-div a label{
+    text-align: left;
+    width: 20%;
+  }
+
+  .details-container{
+    position: fixed;
+    width: 80%;
+    left: 10%;
+    right: 10%;
+  }
+
+}
+
+@media (max-width: 750px) {
+  .pagination-div{
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 20px;
+  }
+
+  .pagination-div *{
+    margin: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .title-div{
+    font-size: 20px;
+    align-items: center;
+  }
+
+  .title-div .btn{
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+}
+
+

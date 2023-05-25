@@ -1,0 +1,25 @@
+<div class="main-container">
+ <div class="sub-routes" *ngIf="isLoggedIn" #submenu [ngClass]="{ 'expanded': pulledDown }">
+  <ul>
+    <li>
+      <a (click)="loadComponent('students')"><i class="fa fa-graduation-cap"></i>  Tanulók</a></li>
+    <li>
+      <a (click)="loadComponent('lecturing')"><i class="fa fa-chalkboard-teacher"></i>  Tanári viszonyok</a></li>
+    <li>
+      <a (click)="loadComponent('users')"><i class="fa fa-users"></i>  Felhasználók</a></li>
+    <li> <a class="pull-up" (click)="pulldown()" style="height:20px; padding-left: 0px;">
+      <i [ngClass]="pulledDown ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"></i>
+    </a></li>
+  </ul>
+ </div>
+ <div class="subcomponent-container" *ngIf="isLoggedIn" #subComponentContainer></div>
+ <div class="logoutMessage" *ngIf="!isLoggedIn">
+    <a>Adatok eléréséhez jelentkezzen be!</a>
+ </div>
+
+  <div class="side-information">
+    <a class="count" *ngIf="storageService.count!=-1">Létszám: {{storageService.count}}</a>
+    <a class="count"><span>Tanév:</span> {{storageService.getSchoolYear()}}</a>
+  </div>
+</div>
+

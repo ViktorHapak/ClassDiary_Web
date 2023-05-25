@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="title-div">
+    <div><a></a></div>
+    <a *ngIf="operation == 'add'"> <strong>Tanuló létrehozása</strong> </a>
+    <a *ngIf="operation == 'update'"> <strong>Adatok módosítása</strong> </a>
+    <a *ngIf="operation == 'read'"> <strong>Adatok beolvasása</strong> </a>
+    <button class="btn btn-outline-danger" (click)="close()">X</button>
+  </div>
+  <hr>
+  <form [formGroup]="studentForm" class="controls" name="form" #f="ngForm">
+    <div class="name-div control-div">
+      <label style="text-align: left" for="name">Név</label>
+      <input type="text" id="name" placeholder="Név" required formControlName='name'>
+      <small style="color:red; text-align: center"
+             *ngIf="studentForm.get('name').touched &&
+               studentForm.get('name').errors?.['required']">
+        Kötelező mező!</small>
+      <small style="color:red; text-align: center"
+             *ngIf="studentForm.get('name').touched &&
+               studentForm.get('name').errors?.['isValidName']">
+        Nem megfelelő név-formátum!</small>
+    </div>
+    <div class="birth-div control-div">
+      <label style="text-align: left" for="birth">Szül. dátum</label>
+      <input type="date" id="birth" placeholder="Szül. dátum" required formControlName='birth'>
+      <small style="color:red; text-align: center"
+             *ngIf="studentForm.get('birth').touched &&
+               studentForm.get('birth').errors?.['required']">
+        Kötelező mező!</small>
+      <small style="color:red; text-align: center"
+             *ngIf="studentForm.get('birth').touched &&
+               studentForm.get('birth').errors?.['dateTimeValidator']">
+        A tanuló életkora 9 és 18 év közötti lehet!</small>
+    </div>
+    <div class="address-div control-div" >
+      <label style="text-align: left" for="address">Lakcím</label>
+      <input type="text" id="address" placeholder="Lakcím" required formControlName='address'>
+      <small style="color:red; text-align: center"
+             *ngIf="studentForm.get('address').touched &&
+               studentForm.get('address').errors?.['required']">
+        Kötelező mező!</small>
+      <small style="color:red; text-align: center"
+             *ngIf="studentForm.get('birth').touched &&
+               studentForm.get('birth').errors?.['isValidValue']">
+        Nem megfelelő lakcím-formátum!</small>
+    </div>
+    <div class="info-div control-div" *ngIf="operation == 'update' || operation == 'read'">
+      <label style="text-align: left" for="info">Egyéb információk</label>
+      <textarea id="info" name="info-area" rows="4" formControlName='info'>
+      </textarea>
+    </div>
+    <div class="sclass-div">
+      <div style="display: flex; gap: 5px">
+        <label style="text-align: left" for="sclass">Osztály:</label>
+        <select [(ngModel)]="currentSclassName" id="sclass" formControlName='sclass' >
+          <option *ngFor="let className of sclassNames" [value]="className">
+            {{ className }}
+          </option>
+        </select>
+      </div>
+      <button class="btn btn-danger" appButtonHover [highlightColor]= "'#f5b7b1'"
+              [disabled]="operation != 'update'" *ngIf="student.sclass != '' else addTemplate" (click)="removeFromClass()">
+        Eltávolítás</button>
+      <ng-template #addTemplate>
+        <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'"
+      [disabled]="operation != 'update' || currentSclassName == ''" (click)="addToClass(currentSclassName)">
+          Hozzárendelés</button>
+      </ng-template>
+    </div>
+    <div class="parents-div control-div">
+      <label style="text-align: left" for="parents">A tanuló szülei:</label>
+      <div class="parent-list" id="parents">
+        <a *ngFor="let parent of student.parents">{{parent}}</a>
+      </div>
+    </div>
+  </form>
+  <button class="btn btn-success" appButtonHover [highlightColor]="'#82e0aa'"
+          *ngIf="operation == 'add'" (click)="onSubmit()"
+          [disabled]="!studentForm.valid || isProcessing || !isFormTouched()">Hozzáadás</button>
+  <button class="btn btn-success" appButtonHover [highlightColor]="'#82e0aa'"
+          *ngIf="operation == 'update'" (click)="onSubmit()"
+          [disabled]="!studentForm.valid || isProcessing || !isFormTouched()">Módosítás</button>
+  <div class="alert alert-danger" *ngIf="crudError">
+    <a> <strong>{{ errorMessage }}</strong></a>
+  </div>
+</div>

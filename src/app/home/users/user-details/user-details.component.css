@@ -1,0 +1,253 @@
+.container{
+  position: relative;
+  background-color: #eaeeee;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  box-shadow: 0 0 5px rgba(25, 25, 25, 0.9) !important;
+  z-index: 7;
+  overflow-scrolling: touch;
+}
+
+.title-div{
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 26px;
+  padding: 10px;
+}
+
+
+.controls{
+  width: 80%;
+  max-height: 400px;
+  margin-left: 10%;
+  background-color: white;
+  overflow-y: scroll;
+  padding: 10px;
+}
+
+.control-div{
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.control-div input, textarea{
+  background-color: #f1fcfc;
+  border: 0.1px solid gray;
+}
+
+.control-div input:focus, textarea:focus{
+  outline: none;
+  box-shadow: 0 0 2px gray !important;
+  border: 0.1px solid gray;
+}
+
+.control-div input:hover, textarea:hover{
+  box-shadow: 0 0 2px rgba(0, 0, 255, 2) !important;
+  border: 0.1px solid blue;
+}
+
+.sclass-div{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+label{
+  font-size: 16px;
+  font-weight: 750;
+  white-space: nowrap;
+  margin-left: 5px;
+}
+
+select{
+  border-radius: 5px;
+  padding: 2px
+}
+
+select:focus {
+  outline: none;
+  border-color: #5dade2;
+  box-shadow: 0 0 5px rgba(93, 173, 226, 0.5);
+}
+
+select:hover {
+  border-color: #82e0aa;
+  cursor: pointer;
+}
+
+.control-div *{
+  display: block;
+  text-align: left;
+  width: 100%;
+  padding: 5px;
+}
+
+.control-div small{
+  height: 30px;
+  min-height: 30px;
+  max-height: 30px;
+}
+
+.role-div a{
+  display: block;
+  background-color: #e8fbfb;
+  border: 0.5px solid gray;
+  opacity: 0.6;
+  width: 100%;
+  padding: 5px;
+}
+
+.role-div a:has{
+  background-color: white;
+}
+
+.children-div{
+  position: relative;
+}
+
+.children-div label, input[type='text']{
+  display: block;
+  width: 100%;
+}
+
+.student-list{
+  display: none;
+  background: white;
+  border: 1px solid lightgray;
+  max-height: 200px;
+  overflow-y: scroll;
+  position: absolute;
+  transition: 1s linear;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.children-div input[type='text']{
+  padding: 5px;
+  border: 0.1px solid gray;
+}
+
+.children-div input:focus, textarea:focus{
+  outline: none;
+  box-shadow: 0 0 2px gray !important;
+  border: 0.1px solid gray;
+}
+
+.children-div input:hover, textarea:hover{
+  box-shadow: 0 0 2px rgba(0, 0, 255, 2) !important;
+  border: 0.1px solid blue;
+}
+
+.children-div input:focus ~ .student-list,
+.student-list:hover
+{
+  display: block;
+}
+
+.children-div .btn{
+  margin-top: 10px;
+  width: 100%;
+}
+
+.student-list a {
+  display: block;
+  background-color: lightgray;
+  border: 0.1px solid gray;
+  opacity: 0.6;
+  width: 100%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.student-list a:hover {
+  background-color: white;
+  box-shadow: 0 0 2px gray !important;
+  border: 1px solid black;
+}
+
+.more-div{
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.roles-group{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.btn-success{
+  display: block;
+  margin: 20px auto;
+  width: 80%;
+  cursor: pointer;
+}
+
+.alert-danger{
+  margin-left: 5%;
+  width: 90%;
+}
+
+.input[type="date"] {
+  appearance: none;
+}
+
+.input[type="date"]::-webkit-calendar-picker-indicator {
+  background: url('https://cdn-icons-png.flaticon.com/512/1827/1827933.png') no-repeat;
+  background-size: 20px;
+  cursor: pointer;
+  padding-right: 10px;
+}
+
+
+select option {
+  padding: 10px;
+  font-size: 16px;
+  background-color: white;
+  color: black;
+  overflow-y: scroll;
+}
+
+select option:checked {
+  background-color: darkgray;
+  color: white;
+}
+
+select[multiple]{
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+@media (max-height: 630px) {
+  .controls{
+    height: 200px;
+  }
+
+  .container{
+    height: auto;
+    max-height: 100%;
+    overflow-y: scroll;
+  }
+
+
+
+
+}

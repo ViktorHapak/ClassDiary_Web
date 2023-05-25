@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="title-div">
+    <a></a>
+    <a *ngIf="operation == 'add'"><strong>Tantárgy hozzáadása</strong></a>
+    <a *ngIf="operation == 'delete'"><strong>Tantárgy törlése</strong></a>
+    <button class="btn btn-outline-danger" (click)="close()">X</button>
+  </div>
+  <hr>
+  <div class="controls">
+    <form class="add-form control-div" *ngIf="operation == 'add'"
+          name="form" [formGroup]="subjectForm">
+      <input type="text" id="name" placeholder="Elnevezés" required formControlName="name">
+      <small style="color:red; text-align: center"
+             *ngIf="subjectForm.get('name').touched &&
+               subjectForm.get('name').errors?.['required']">
+        Kötelező mező!</small>
+      <small style="color:red; text-align: center"
+             *ngIf="subjectForm.get('name').touched &&
+               subjectForm.get('name').errors?.['isValidName']">
+        Nem megfelelő elnevezés!</small>
+    </form>
+
+    <div class="delete-div control-div" *ngIf="operation == 'delete'">
+      <input type="text" id="subject-delete" placeholder="Tantárgy" required [(ngModel)]="searchSubjectName"
+             (ngModelChange)="getSubjects();currentSubjectName=''">
+      <div *ngIf="searchSubjectName != currentSubjectName && searchSubjectName !=''"
+           class="subject-list search-list">
+        <a *ngFor="let subject of subjects"
+           (click)="changeCurrentSubjectName(subject)">{{subject.name}}</a>
+      </div>
+
+    </div>
+  </div>
+  <button class="btn btn-success" appButtonHover [highlightColor]="'#82e0aa'" (click)="onSubmit()"
+          [disabled]="isProcessing || !subjectForm.valid " *ngIf="operation=='add'">Létrehozás</button>
+  <button class="btn btn-danger" appButtonHover [highlightColor]="'#f5b7b1'" (click)="onSubmit()"
+          [disabled]="isProcessing || !subjectFilled()" *ngIf="operation=='delete'">Törlés</button>
+  <div class="alert alert-danger" *ngIf="crudError">
+    <a> <strong>{{ errorMessage }}</strong></a>
+  </div>
+
+</div>

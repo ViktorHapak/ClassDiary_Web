@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="title-div">
+    <a></a>
+    <a><strong>Új tanári viszony</strong></a>
+    <button class="btn btn-outline-danger" (click)="close()">X</button>
+  </div>
+  <hr>
+
+  <div class="controls">
+    <div class="subject-div control-div">
+      <label for="subject">Tantárgy</label>
+      <input type="text" id="subject" placeholder="Tantárgy" required [(ngModel)]="searchSubjectName"
+      (ngModelChange)="getSubjects();currentSubjectName=''">
+      <div *ngIf="searchSubjectName != currentSubjectName && searchSubjectName !='' && subjects.length>0"
+           class="subject-list search-list" id="students">
+        <a *ngFor="let subject of subjects"
+           (click)="changeCurrentSubjectName(subject)">{{subject.name}}</a>
+      </div>
+    </div>
+
+    <div class="teacher-div control-div">
+      <label style="text-align: left" for="teacher">Tanár</label>
+      <input type="text" id="teacher" placeholder="Tanár" required [(ngModel)]="searchTeacherName"
+             (ngModelChange)="getTeachers(); currentTeacherName=''">
+      <div *ngIf="searchTeacherName != currentTeacherName && searchTeacherName !=''"
+           class="teacher-list search-list">
+        <a *ngFor="let teacher of teachers"
+           (click)="changeCurrentTeacherName(teacher)">{{teacher.name}}</a>
+      </div>
+    </div>
+
+    <div class="sclass-div control-div">
+      <label style="text-align: left" for="sclass">Osztály</label>
+      <input type="text" id="sclass" placeholder="Osztály" required [(ngModel)]="searchSclassName"
+             (ngModelChange)="getClassNames(); currentSclassName=''">
+      <div *ngIf="searchSclassName != currentSclassName && searchSclassName !=''"
+           class="sclass-list search-list">
+        <a *ngFor="let sclassName of sclassNames"
+           (click)="changeCurrentSclassName(sclassName)">{{sclassName}}</a>
+      </div>
+
+    </div>
+  </div>
+  <button class="btn btn-success" appButtonHover [highlightColor]="'#82e0aa'" (click)="onSubmit()"
+          [disabled]="isProcessing || !subjectFilled() || !teacherFilled()
+           || !sclassFilled()">Létrehozás</button>
+  <div class="alert alert-danger" *ngIf="crudError">
+    <a> <strong>{{ errorMessage }}</strong></a>
+  </div>
+</div>

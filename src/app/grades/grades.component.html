@@ -1,0 +1,243 @@
+<div class="container">
+
+  <div class="selectors">
+
+    <div class="left-selectors">
+      <div class="semester-div selector-div">
+       <label for="semester-selector">Félév:</label>
+       <select [(ngModel)]="loadSemester" id="semester-selector">
+        <option [value]="" selected></option>
+        <option value="I.">I.</option>
+        <option value="II.">II.</option>
+        <option value="final">Tanév</option>
+       </select>
+      </div>
+
+      <div class="sclass-div selector-div" #classDiv>
+        <label for="sclass-input">Osztály:</label>
+        <input type="text" placeholder="Oszály" [(ngModel)]="searchSclassName" id="sclass-input"
+               (ngModelChange)="getClassNames(); loadSclassName=''">
+        <div class="sclass-list search-list"
+             *ngIf="searchSclassName != '' && searchSclassName != loadSclassName && sclassNames.length>0"
+             #classDropdown>
+          <a *ngFor="let sclassName of sclassNames"
+             (click)="changeSclassNameToLoad(sclassName)">{{sclassName}}</a>
+        </div>
+      </div>
+
+      <div class="subject-div selector-div" #subjectDiv>
+        <label for="subject-input">Tantárgy:</label>
+        <input type="text" placeholder="Tantárgy" [(ngModel)]="searchSubjectName" id="subject-input"
+               (ngModelChange)="getSubjects(); loadSubjectName=''">
+        <div class="subject-list search-list"
+             *ngIf="searchSubjectName != '' && searchSubjectName != loadSubjectName && subjects.length>0"
+             #subjectDropdown>
+          <a *ngFor="let subject of subjects"
+             (click)="changeSubjectNameToLoad(subject)">{{subject.name}}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-selectors">
+      <div class="module-div selector-div">
+        <label for="module-selector">Modul:</label>
+        <select [(ngModel)]="currentModule" id="module-selector">
+          <option [value]="-1" selected></option>
+          <option *ngFor="let num of Array.of(1,2,3)" [value]="num">
+            {{ num }}
+          </option>
+        </select>
+      </div>
+
+      <div class="grade-div selector-div">
+        <label for="grade-selector">Érdemjegy:</label>
+        <select [(ngModel)]="currentGrade" id="grade-selector">
+          <option [value]="-1" selected></option>
+          <option *ngFor="let grade of Array.of(1,2,3,4,5)" [value]="grade">
+            {{ grade }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="load-container">
+    <button class="btn btn-primary" (click)="loadTable()"
+    [disabled]="!isFilledToLoad()" appButtonHover [highlightColor]="'#85c1e9'">Betöltés</button>
+
+    <div class="search-box">
+      <input class="search" placeholder="Search..." [(ngModel)]="name" (ngModelChange)="filterByName()">
+      <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'" [disabled]="currentSemester==''">
+        <i class="fa fa-magnifying-glass"></i></button>
+    </div>
+  </div>
+
+  <a class="error-container" [ngClass]="{ 'errorShown': operationError }" #errorMessageCon>
+    {{errorMessage}}
+  </a>
+
+  <a class="no-message" *ngIf="currentSemester==''">Az osztálynapló kezeléséhez adja meg a szükséges adatokat!</a>
+
+  <div class="grade1-table-container table-container" *ngIf="currentSemester=='I.'">
+    <table>
+      <thead>
+      <tr>
+        <th class="name-tr">Tanuló</th>
+        <th class="modulegrades-tr">Modul 1</th>
+        <th class="module-tr"></th>
+        <th class="modulegrades-th">Modul 2</th>
+        <th class="module-th"></th>
+        <th class="modulegrades-th">Modul 3</th>
+        <th class="module-th"></th>
+        <th class="semester-th">Félév</th>
+        <th class="operation-th"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let grades1 of grades1ToDisplay">
+        <td class="name-td">{{grades1.studentName}}</td>
+        <td class="modulegrades-td">
+          <ng-container *ngIf="grades1.modulegrades1 | gradeListSlicer:this:16 as sliced">
+            <div class="grades-scroll">{{sliced.gradeList}}</div>
+            <i class="fa fa-circle-info" *ngIf="sliced.isSliced"
+               title="{{grades1.modulegrades3}}"></i>
+          </ng-container>
+        </td>
+        <td class="module-td"><a>{{grades1.module1}}</a></td>
+        <td class="modulegrades-td">
+          <ng-container *ngIf="grades1.modulegrades2 | gradeListSlicer:this:16 as sliced">
+            <div class="grades-scroll">{{sliced.gradeList}}</div>
+            <i class="fa fa-circle-info" *ngIf="sliced.isSliced"
+               title="{{grades1.modulegrades3}}"></i>
+          </ng-container>
+        </td>
+        <td class="module-td"><a>{{grades1.module2}}</a></td>
+        <td class="modulegrades-td">
+          <ng-container *ngIf="grades1.modulegrades3 | gradeListSlicer:this:16 as sliced">
+            <div class="grades-scroll">{{sliced.gradeList}}</div>
+            <i class="fa fa-circle-info" *ngIf="sliced.isSliced"
+               title="{{grades1.modulegrades3}}"></i>
+          </ng-container>
+
+        </td>
+        <td class="module-td"><a>{{grades1.module3}}</a></td>
+        <td class="semester-td"><a>{{grades1.semester}}</a></td>
+        <td class="operation-td btn-group-sm text-center">
+          <a class="text-success mx-1 my-1">
+            <i class="fa fa-plus" appButtonHover [highlightColor]="'#96fab9'"
+            (click)="addGrade(grades1.studentId)"></i></a>
+          <a class="text-danger mx-1 my-1">
+            <i class="fa fa-minus" appButtonHover [highlightColor]="'#f5b7b1'"
+               (click)="removeGrade(grades1.studentId)"></i></a>
+          <a class="text-info mx-1 my-1">
+            <i class="fa fa-calculator" appButtonHover [highlightColor]="'#bdf7fd'"
+               (click)="calculateModule(grades1.studentId)"></i></a>
+          <a class="text-primary mx-1 my-1">
+            <i class="fa fa-book-bookmark" appButtonHover [highlightColor]="'#85c1e9'"
+               (click)="calculateSemester(grades1.studentId)"></i></a>
+          <div class="fade-div" *ngIf="!teacherAccess()"></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grade2-table-container table-container" *ngIf="currentSemester=='II.'">
+    <table>
+      <thead>
+      <tr>
+        <th class="name-tr">Tanuló</th>
+        <th class="modulegrades-tr">Modul 1</th>
+        <th class="module-tr"></th>
+        <th class="modulegrades-th">Modul 2</th>
+        <th class="module-th"></th>
+        <th class="modulegrades-th">Modul 3</th>
+        <th class="module-th"></th>
+        <th class="semester-th">Félév</th>
+        <th class="operation-th"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let grades2 of grades2ToDisplay">
+        <td class="name-td">{{grades2.studentName}}</td>
+        <td class="modulegrades-td">
+          <ng-container *ngIf="grades2.modulegrades1 | gradeListSlicer:this:16 as sliced">
+            <div class="grades-scroll">{{sliced.gradeList}}</div>
+            <i class="fa fa-circle-info" *ngIf="sliced.isSliced"
+               title="{{grades2.modulegrades1}}"></i>
+          </ng-container>
+        </td>
+        <td class="module-td"><a>{{grades2.module1}}</a></td>
+        <td class="modulegrades-td">
+          <ng-container *ngIf="grades2.modulegrades2 | gradeListSlicer:this:16 as sliced">
+            <div class="grades-scroll">{{sliced.gradeList}}</div>
+            <i class="fa fa-circle-info" *ngIf="sliced.isSliced"
+               title="{{grades2.modulegrades2}}"></i>
+          </ng-container>
+        </td>
+        <td class="module-td"><a>{{grades2.module2}}</a></td>
+        <td class="modulegrades-td">
+          <ng-container *ngIf="grades2.modulegrades3 | gradeListSlicer:this:16 as sliced">
+            <div class="grades-scroll">{{sliced.gradeList}}</div>
+            <i class="fa fa-circle-info" *ngIf="sliced.isSliced"
+               title="{{grades2.modulegrades3}}"></i>
+          </ng-container>
+        </td>
+        <td class="module-td"><a>{{grades2.module3}}</a></td>
+        <td class="semester-td"><a>{{grades2.semester}}</a></td>
+        <td class="operation-td btn-group-sm text-center">
+          <a class="text-success mx-1 my-1">
+            <i class="fa fa-plus" appButtonHover [highlightColor]="'#96fab9'"
+               (click)="addGrade(grades2.studentId)"></i></a>
+          <a class="text-danger mx-1 my-1">
+            <i class="fa fa-minus" appButtonHover [highlightColor]="'#f5b7b1'"
+               (click)="removeGrade(grades2.studentId)"></i></a>
+          <a class="text-info mx-1 my-1">
+            <i class="fa fa-calculator" appButtonHover [highlightColor]="'#bdf7fd'"
+               (click)="calculateModule(grades2.studentId)"></i></a>
+          <a class="text-primary mx-1 my-1">
+            <i class="fa fa-book-bookmark" appButtonHover [highlightColor]="'#85c1e9'"
+               (click)="calculateSemester(grades2.studentId)"></i></a>
+          <div class="fade-div" *ngIf="!teacherAccess()"></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="finalgrades-table-container table-container" *ngIf="currentSemester=='final'">
+    <table>
+      <thead>
+      <tr>
+        <th class="student-th">Tanuló</th>
+        <th class="semester-th">I.félév</th>
+        <th class="semester-th">II.félév</th>
+        <th class="exam-th">Vizsga</th>
+        <th class="grade-th">Tanév</th>
+        <th class="operation-th"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let finalgrades of finalgradesToDisplay">
+        <td class="student-td">{{finalgrades.studentName}}</td>
+        <td class="semester-td"><a>{{finalgrades.grade1}}</a></td>
+        <td class="semester-td"><a>{{finalgrades.grade2}}</a></td>
+        <td class="exam-td"><a>{{finalgrades.exam}}</a></td>
+        <td class="grade-td"><a>{{finalgrades.grade}}</a></td>
+        <td class="operationFN-td btn-group-sm text-center">
+          <a class="text-success mx-1 my-1">
+            <i class="fa fa-plus" appButtonHover [highlightColor]="'#96fab9'"
+            (click)="evaluateExam(finalgrades.studentId)"></i></a>
+          <a class="text-primary mx-1 my-1">
+            <i class="fa fa-book-bookmark" appButtonHover [highlightColor]="'#85c1e9'"
+            (click)="calculateSchoolYear(finalgrades.studentId)">
+          </i></a>
+          <div class="fade-div" *ngIf="!teacherAccess()"></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

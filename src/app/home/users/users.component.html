@@ -1,0 +1,103 @@
+<div class="container">
+  <div class="pagination-div">
+    <div class="page-controls" style="margin-top: 20px">
+    <pagination-controls
+                         previousLabel="Prev"
+                         nextLabel="Next"
+                         [responsive]="true"
+                         (pageChange)="handlePageChange($event)"
+    ></pagination-controls>
+    </div>
+
+    <div class="sizelength-div">
+      <label style="font-weight: 750" for="pagesize-selector">Felhasználó/oldal:</label>
+      <input type="number" id="pagesize-selector" [(ngModel)]="size" (ngModelChange)="handleSizeChange($event)">
+    </div>
+
+  </div>
+
+  <div class="data-div">
+    <div class="users-div">
+      <table class="users-table">
+        <thead>
+        <tr>
+          <th class="name-th">Felhasználók</th>
+          <th class="operations-th"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users | paginate : {itemsPerPage: size,
+                  currentPage: page,
+                  totalItems: count}">
+          <td class="name-td" style="padding-left: 10px">{{user.name}}</td>
+          <td class="operations-td btn-group-sm">
+            <button class="btn btn-danger mx-2 my-2" (click)="removeUser(user)"
+            [disabled]="user.name == this.storageService.getUser().username || !adminAccess()">
+              <i class="fa fa-trash"></i></button>
+            <button class="btn btn-info mx-2 my-2" (click)="callInfo(user)"
+            [disabled]="user.id == currentIndex || !teacherAccess()"><i class="fa fa-info"></i></button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-div">
+      <div class="title-div">
+        <h3 class="students-title" style="text-align: center;">A felhasználó adatai</h3>
+      </div>
+      <div class="search-div" >
+        <input type="text" placeholder="Felhasználónév" [(ngModel)]="name" (ngModelChange)="searchByName()">
+        <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'">
+          <i class="fa fa-magnifying-glass"></i></button>
+      </div>
+      <div class="roles-div">
+        <div *ngFor="let radioValue of roleNames">
+          <input type="radio" name="roleFilter" value="{{radioValue}}" [(ngModel)]="currentRoleName"
+                 (ngModelChange)="searchByRole()">
+          <span><label>{{formatRoleName(radioValue)}}</label></span>
+        </div>
+      </div>
+      <div class="current-div" *ngIf="currentIndex != -1">
+        <div class="current-data-div">
+         <a><label><strong>Id:</strong> </label>{{currentIndex}}</a>
+         <a><label><strong>Név:</strong> </label>{{currentUser.lastname}} {{currentUser.firstname}}</a>
+         <a><label><strong>Email:</strong> </label>{{currentUser.email}}</a>
+         <a><label><strong>Jog.:</strong> </label>{{formatRoleName(currentUser.userrole)}}</a>
+         <a *ngIf="currentUser.userrole.includes('ROLE_ClassHead')">
+           <label><strong>Osztály.:</strong> </label> {{currentUser.sclass}}</a>
+         <a *ngIf="currentUser.userrole.includes('ROLE_Teacher') || currentUser.userrole.includes('ROLE_ClassHead')">
+          <label><strong>Tanári viszonyok:</strong></label></a>
+         <ul *ngIf="currentUser.userrole.includes('ROLE_Teacher') || currentUser.userrole.includes('ROLE_ClassHead')">
+           <li *ngFor="let registry of currentUser.teacherRegistries">{{registry}}</li>
+         </ul>
+          <a *ngIf="currentUser.userrole.includes('ROLE_Parent')">
+            <label><strong>Szülői viszonyok:</strong></label></a>
+          <ul *ngIf="currentUser.userrole.includes('ROLE_Parent')">
+            <li *ngFor="let child of currentUser.children">{{child}}</li>
+          </ul>
+        </div>
+        <div class="btn-group-sm refresh-div">
+          <button class="btn btn-warning mx-1 my-1" (click)="openForm('update',currentUser)"
+          appButtonHover [highlightColor]="'#f8efb5'"
+                  [disabled]="!adminAccess()">Módosítás</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlap" *ngIf="crudMode"></div>
+
+  <div class="details-container" *ngIf="crudMode">
+    <app-user-details
+      [operation]="crudOperation"
+      [index]="currentIndex"
+      (formClose)="crudMode = false"
+      (crudDone)="crudMode = false; messageText = $event; messageMode=true"></app-user-details>
+  </div>
+
+  <div class="message-container" *ngIf="messageMode">
+    <app-user-message [message]="messageText"
+                      (messageClose)="messageMode = false; refreshList()"></app-user-message>
+  </div>
+</div>

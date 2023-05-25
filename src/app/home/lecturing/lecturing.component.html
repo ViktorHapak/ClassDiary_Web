@@ -1,0 +1,188 @@
+<div class="container">
+
+  <div class="filter-div">
+    <div class="search-div">
+      <div class="no-filter filter" *ngIf="filterValue==''">
+        <input type="text" disabled placeholder="Válasszon szűrési szempontot!">
+        <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'" [disabled]="true">
+          <i class="fa fa-magnifying-glass"></i></button>
+      </div>
+
+      <div class="subject-filter active-filter filter" *ngIf="filterValue=='subject'">
+        <input type="text" placeholder="Tantárgy" [(ngModel)]="searchSubjectName"
+               (ngModelChange)="getSubjects(); currentSubjectName=''" >
+        <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'">
+          <i class="fa fa-magnifying-glass"></i></button>
+
+        <div *ngIf="searchSubjectName != currentSubjectName && searchSubjectName !=''
+             && subjects.length>0"
+             class="subject-list search-list">
+          <a *ngFor="let subject of subjects"
+             (click)="changeCurrentSubjectName(subject)">{{subject.name}}</a>
+        </div>
+      </div>
+
+      <div class="teacher-filter active-filter filter" *ngIf="filterValue=='teacher'">
+        <input type="text" placeholder="Tanár" [(ngModel)]="searchTeacherName"
+               (ngModelChange)="getTeachers(); currentTeacherName=''" >
+        <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'">
+          <i class="fa fa-magnifying-glass"></i></button>
+
+        <div *ngIf="searchTeacherName != currentTeacherName && searchTeacherName !=''
+               && teachers.length>0"
+             class="teacher-list search-list">
+          <a *ngFor="let teacher of teachers"
+             (click)="changeCurrentTeacherName(teacher)">{{teacher.name}}</a>
+        </div>
+      </div>
+
+
+      <div class="sclass-filter active-filter filter" *ngIf="filterValue=='sclass'">
+        <input type="text" placeholder="Osztály" [(ngModel)]="searchSclassName"
+               (ngModelChange)="getClassNames(); currentSclassName=''" >
+        <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'">
+          <i class="fa fa-magnifying-glass"></i></button>
+
+        <div *ngIf="searchSclassName != currentSclassName && searchSclassName !=''
+               && sclassNames.length>0"
+             class="subject-list search-list">
+          <a *ngFor="let sclassName of sclassNames"
+             (click)="changeCurrentSclassName(sclassName)">{{sclassName}}</a>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="filter-selection">
+      <div class="subject-radio radio">
+        <input type="radio" name="registryFilter" [(ngModel)]="filterValue" value="subject"
+        (ngModelChange)="getAllRegistries()">
+        <span><label>Tantárgy</label></span>
+      </div>
+      <div class="teacher-radio radio">
+        <input type="radio" name="registryFilter" [(ngModel)]="filterValue" value="teacher"
+               (ngModelChange)="getAllRegistries()">
+        <span><label>Tanár</label></span>
+      </div>
+      <div class="sclass-radio radio">
+        <input type="radio" name="registryFilter" [(ngModel)]="filterValue" value="sclass"
+               (ngModelChange)="getAllRegistries()">
+        <span><label>Osztály</label></span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="pagination-div">
+    <pagination-controls style="margin-top: 20px; font-weight: 700"
+                         previousLabel="Prev"
+                         nextLabel="Next"
+                         [responsive]="true"
+                         (pageChange)="handlePageChange($event)"
+    ></pagination-controls>
+
+    <button class="btn btn-success" appButtonHover [highlightColor]="'#82e0aa'"
+    (click)="openForm()" [disabled]="!adminAccess()">Új tanári viszony</button>
+
+  </div>
+
+  <div class="title-div">
+    <a class="lecturing-title">Tanári viszonyok</a>
+
+    <div class="sizelength-div">
+      <label style="font-weight: 750" for="pagesize-selector">Objektum/oldal:</label>
+      <input type="number" id="pagesize-selector" [(ngModel)]="size" (ngModelChange)="handleSizeChange($event)">
+    </div>
+  </div>
+
+  <div class="lecturing-container">
+    <table class="lecturing-table">
+      <thead>
+      <tr>
+        <th class="subject-th">
+          <div>Tantárgy
+            <i *ngIf="sortValue=='subject' && sorDirection=='desc' else subjectAscTemplate"
+               class="fa fa-chevron-down" (click)="changeSorting('subject','asc')"></i>
+            <ng-template #subjectAscTemplate><i class="fa fa-chevron-up"
+                     (click)="changeSorting('subject','desc')"></i></ng-template>
+          </div>
+        </th>
+        <th class="teacher-th">
+          <div>Tanár
+            <i *ngIf="sortValue=='teacher' && sorDirection=='desc' else teacherAscTemplate"
+               class="fa fa-chevron-down" (click)="changeSorting('teacher','asc')"></i>
+            <ng-template #teacherAscTemplate><i class="fa fa-chevron-up"
+                        (click)="changeSorting('teacher','desc')"></i></ng-template>
+          </div></th>
+        <th class="sclass-th">
+          <div>Osztály
+            <i *ngIf="sortValue=='sclass' && sorDirection=='desc' else sclassAscTemplate"
+               class="fa fa-chevron-down" (click)="changeSorting('sclass','asc')"></i>
+            <ng-template #sclassAscTemplate><i class="fa fa-chevron-up"
+                     (click)="changeSorting('sclass','desc')"></i></ng-template>
+          </div></th>
+        <th class="text-center operations-th"></th>
+      </tr>
+      </thead>
+      <tbody *ngIf="parentAccess()">
+      <tr *ngFor="let registry of teacherRegistries | paginate : {itemsPerPage: size,
+                  currentPage: page,
+                  totalItems: count}">
+        <td class="subject-td">{{registry.subject}}</td>
+        <td class="teacher-td">{{registry.teacher}}</td>
+        <td class="sclass-td text-center">{{registry.sclass}}</td>
+        <td class="btn-group-sm text-center operations-td">
+          <a class="text-danger mx-1 my-1" (click)="removeRegistry(registry.id)">
+            <i class="fa fa-minus" appButtonHover [highlightColor]="'#f5b7b1'"></i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="crud-container">
+    <div class="subject-operations">
+      <button class="btn btn-success" appButtonHover [highlightColor]="'#82e0aa'"
+      (click)="openSubjectForm('add')" [disabled]="!adminAccess()">
+        <i class="fa fa-plus"></i> Tantárgy
+      </button>
+      <button class="btn btn-danger" appButtonHover [highlightColor]="'#f5b7b1'"
+              (click)="openSubjectForm('delete')"
+              [disabled]="!adminAccess()"><i class="fa fa-minus"></i> Tantárgy
+      </button>
+    </div>
+
+    <div class="more-operations">
+      <button class="btn btn-secondary" appButtonHover [highlightColor]="'#c0c0c0'"
+              (click)="beginNewYear()" [disabled]="!adminAccess()">Új tanév
+      </button>
+      <button class="btn btn-dark" appButtonHover [highlightColor]="'#9a9a9a'"
+      (click)="deleteAll()" [disabled]="!adminAccess()">Összes törlése
+      </button>
+    </div>
+  </div>
+
+  <div class="overlap" *ngIf="crudMode || subjectCrudMode"></div>
+
+  <div class="details-container" *ngIf="crudMode">
+    <app-lecturing-details
+      (formClose)="crudMode = false"
+      (crudDone)="crudMode = false; messageText = $event; messageMode=true">
+    </app-lecturing-details>
+  </div>
+
+  <div class="subject-details-container" *ngIf="subjectCrudMode">
+    <app-subject-details
+      [operation]="subjectOperation"
+      (formClose)="subjectCrudMode = false"
+      (crudDone)="subjectCrudMode = false; messageText = $event; messageMode=true">
+    </app-subject-details>
+  </div>
+
+  <div class="message-container" *ngIf="messageMode">
+    <app-lecturing-message
+      [message]="messageText"
+      (messageClose)="messageMode = false; refreshList()">
+    </app-lecturing-message>
+  </div>
+
+</div>

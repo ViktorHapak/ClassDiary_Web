@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="title-div">
+    <a></a>
+    <a><strong>Felhasználó módosítása</strong></a>
+    <button class="btn btn-outline-danger" (click)="close()">X</button>
+  </div>
+  <hr>
+  <div class="controls">
+    <form [formGroup]="userForm" name="form">
+      <div class="lastname-div control-div">
+        <label  for="lastname">Vezetéknév</label>
+        <input type="text" id="lastname" placeholder="Vezetéknév" required formControlName='lastname'>
+        <small style="color:red; text-align: center"
+               *ngIf="userForm.get('lastname').touched &&
+               userForm.get('lastname').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="userForm.get('lastname').touched &&
+               userForm.get('lastname').errors?.['isValidName']">
+          Nem megfelelő formátum!</small>
+      </div>
+      <div class="firstname-div control-div">
+        <label for="firstname">Keresztnév</label>
+        <input type="text" id="firstname" placeholder="Keresztnév" required formControlName="firstname">
+        <small style="color:red; text-align: center"
+               *ngIf="userForm.get('firstname').touched &&
+               userForm.get('firstname').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="userForm.get('firstname').touched &&
+               userForm.get('firstname').errors?.['isValidName']">
+          Nem megfelelő formátum!</small>
+      </div>
+      <div class="email-div control-div">
+        <label for="email"> Email</label>
+        <input type="text" id="email" placeholder="Email" required formControlName="email">
+        <small style="color:red; text-align: center"
+               *ngIf="userForm.get('email').touched &&
+               userForm.get('email').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="userForm.get('email').touched &&
+               userForm.get('email').errors?.['email']">
+          Nem megfelelő formátum!</small>
+      </div>
+      <div class="name-div control-div">
+        <label for="name">Felhasználónév</label>
+        <input type="text" id="name" placeholder="Felhasználónév" required formControlName="name">
+        <small style="color:red; text-align: center"
+               *ngIf="userForm.get('name').touched &&
+               userForm.get('name').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="userForm.get('name').touched &&
+               userForm.get('name').errors?.['isValidName']">
+          Nem megfelelő formátum!</small>
+      </div>
+      <div class="birth-div control-div">
+        <label for="birth">Szül. idő</label>
+        <input type="date" id="birth" placeholder="Szül. idő" required formControlName="birth">
+        <small style="color:red; text-align: center"
+               *ngIf="userForm.get('birth').touched &&
+               userForm.get('birth').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="userForm.get('birth').touched &&
+               userForm.get('birth').errors?.['dateTimeValidator']">
+          Az életkor 20 és 90 év között lehet!</small>
+      </div>
+    </form>
+      <div class="role-div">
+        <label style="text-align: left" for="role">Jogviszony:</label>
+        <a name="role">{{user.userrole}}</a>
+      </div>
+      <div class="sclass-div">
+        <div style="display: flex; gap: 5px">
+          <label style="text-align: left" for="sclass">Osztály:</label>
+          <select id="sclass" [(ngModel)]="currentSclassName" [value]="currentSclassName">
+            <option *ngFor="let className of sclassNames" [value]="className">
+              {{ className }}
+            </option>
+            <option [value]="" selected></option>
+          </select>
+        </div>
+        <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'"
+                [disabled]="currentSclassName == ''" (click)="addToClass(currentSclassName)"
+                *ngIf="user.userrole =='ROLE_ClassHead' else classHeadButtonTemplate">
+          Hozzárendelés</button>
+        <ng-template #classHeadButtonTemplate>
+          <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'"
+                  [disabled]="currentSclassName == '' || !isClassHeadRole()" (click)="addClassHeadRole(currentSclassName)">
+            <i class="fa fa-plus"></i> Osztályfőnök jogv.</button>
+        </ng-template>
+      </div>
+      <div class="children-div">
+        <label style="text-align: left" for="sclass">Szülői viszony:</label>
+        <input type="text" id="child_name" placeholder="Tanuló neve" [(ngModel)]="searchStudentRequest"
+               (ngModelChange)="getStudents(); currentStudentName=''" [disabled]="false">
+        <div *ngIf="searchStudentRequest != currentStudentName && searchStudentRequest !=''"
+             class="student-list" id="students">
+          <a *ngFor="let student of studentNames"
+             (click)="changeCurrentStudentName(student)">{{student}}</a>
+        </div>
+      </div>
+      <div class="children-div">
+        <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'"
+                [disabled]="currentStudentName == ''" (click)="addChild(currentStudentName)"
+                *ngIf="user.userrole =='ROLE_Parent' else parentButtonTemplate">
+          Hozzárendelés</button>
+        <ng-template #parentButtonTemplate>
+          <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'"
+                  [disabled]="currentStudentName == '' || !isParentRole()" (click)="addParentRole(currentStudentName)">
+            <i class="fa fa-plus"></i> Szülő jogv.</button>
+        </ng-template>
+      </div>
+      <div class="more-div">
+        <label style="text-align: left" for="sclass">További lehetőségek:</label>
+        <div class="roles-group">
+          <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'"
+                  [disabled]="!isVisitorRole() || isAuthenticated()" (click)="addVisitorRole()">
+            <i class="fa fa-plus"></i> Látogató jogv.</button>
+          <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'"
+                  [disabled]="!isTeacherRole()" (click)="addTeacherRole()">
+            <i class="fa fa-plus"></i> Tanár jogv.</button>
+          <button class="btn btn-primary" appButtonHover [highlightColor]="'#85c1e9'"
+                  [disabled]="!isAdminRole()" (click)="addAdminRole()">
+            <i class="fa fa-plus"></i> Admin jogv.</button>
+        </div>
+      </div>
+
+
+  </div>
+
+  <button class="btn btn-success" appButtonHover [highlightColor]="'#82e0aa'"
+          *ngIf="operation == 'update'" (click)="onSubmit()"
+          [disabled]="!userForm.valid || isProcessing || !isFormTouched()">Módosítás</button>
+  <div class="alert alert-danger" *ngIf="crudError">
+    <a> <strong>{{ errorMessage }}</strong></a>
+  </div>
+</div>

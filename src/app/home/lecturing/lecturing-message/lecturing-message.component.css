@@ -1,0 +1,38 @@
+.container-div{
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  width: 450px;
+  min-height: 150px;
+  transition: 0.5s;
+  box-shadow: 0 0 2px rgba(25, 25, 25, 0.9) !important;
+}
+
+.first-raw{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.first-raw a{
+  display: block;
+  width: 75%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.close{
+}
+
+.ok{
+  width: 30%;
+  margin-left: 70%;
+  padding: 1px;
+  text-align: center;
+}
+
+a {
+  white-space: pre-line;
+}

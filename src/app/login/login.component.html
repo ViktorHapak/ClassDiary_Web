@@ -1,0 +1,33 @@
+<div class="form-container">
+   <div class="title">
+     <a> <strong>Bejelentkezés</strong> </a>
+   </div>
+   <hr>
+  <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()" name="form" #f="ngForm">
+    <div class="controls">
+      <div class="username-div control-div">
+        <label style="text-align: left" for="username">Felhasználónév</label>
+        <input type="text" id="username" placeholder="Felhasználónév" required formControlName="username">
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('username').touched &&
+               reactiveForm.get('username').errors?.['required']">
+          Kötelező mező!</small>
+      </div>
+      <div class="password-div control-div">
+        <label style="text-align: left" for="password">Jelszó</label>
+        <input type="password" id="password" placeholder="Jelszó" required formControlName="password">
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('password').touched &&
+               reactiveForm.get('password').errors?.['required']">
+          Kötelező mező!</small>
+      </div>
+    </div>
+    <button type="submit" [disabled]="!reactiveForm.valid || isProcessing" class="btn btn-success btn-block"
+            appButtonHover [highlightColor]="'#82e0aa'">
+      Bejelentkezés
+    </button>
+  </form>
+  <div class="alert alert-danger" *ngIf="isLoginFailed && f.submitted">
+    <a><strong>{{errorMessage}}</strong></a>
+  </div>
+</div>

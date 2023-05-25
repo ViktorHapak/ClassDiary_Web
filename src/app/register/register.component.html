@@ -1,0 +1,89 @@
+<div class="form-container">
+  <div class="title">
+    <a> <strong>Felhasználó létrehozása</strong> </a>
+  </div>
+  <hr>
+  <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()" name="form" #f="ngForm">
+    <div class="controls">
+      <div class="lastname-div control-div">
+        <label style="text-align: center" for="lastname">Vezetéknév</label>
+        <input type="text" id="lastname" placeholder="Vezetéknév" required formControlName="lastname">
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('lastname').touched &&
+               reactiveForm.get('lastname').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('lastname').touched &&
+               reactiveForm.get('lastname').errors?.['isValidName']">
+          Nem megfelelő formátum!</small>
+      </div>
+      <div class="firstname-div control-div">
+        <label style="text-align: center" for="firstname">Keresztnév</label>
+        <input type="text" id="firstname" placeholder="Keresztnév" required formControlName="firstname">
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('firstname').touched &&
+               reactiveForm.get('firstname').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('firstname').touched &&
+               reactiveForm.get('firstname').errors?.['isValidName']">
+          Nem megfelelő formátum!</small>
+      </div>
+      <div class="email-div control-div">
+        <label style="text-align: center" for="email"> Email</label>
+        <input type="text" id="email" placeholder="Email" required formControlName="email">
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('email').touched &&
+               reactiveForm.get('email').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('email').touched &&
+               reactiveForm.get('email').errors?.['email']">
+          Nem megfelelő formátum!</small>
+      </div>
+      <div class="name-div control-div">
+        <label style="text-align: center" for="name">Felhasználónév</label>
+        <input type="text" id="name" placeholder="Felhasználónév" required formControlName="name">
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('name').touched &&
+               reactiveForm.get('name').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('name').touched &&
+               reactiveForm.get('name').errors?.['isValidName']">
+          Nem megfelelő formátum!</small>
+      </div>
+      <div class="birth-div control-div">
+        <label style="text-align: center" for="birth">Szül. idő</label>
+        <input type="date" id="birth" placeholder="Szül. idő" required formControlName="birth">
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('birth').touched &&
+               reactiveForm.get('birth').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('birth').touched &&
+               reactiveForm.get('birth').errors?.['dateTimeValidator']">
+          Az életkor 20 és 90 év között lehet!</small>
+      </div>
+      <div class="password-div control-div">
+        <label style="text-align: center" for="password">Jelszó</label>
+        <input type="password" id="password" placeholder="Jelszó" required formControlName="password">
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('password').touched &&
+               reactiveForm.get('password').errors?.['required']">
+          Kötelező mező!</small>
+        <small style="color:red; text-align: center"
+               *ngIf="reactiveForm.get('password').touched &&
+               reactiveForm.get('password').errors?.['passwordValidator']">
+          A jelszó 6-36 karakter hosszú lehet! Tartalmaznia kell kis-, nagybetűt, és számot!</small>
+      </div>
+    </div>
+    <button type="submit" [disabled]="!reactiveForm.valid || isProcessing" class="btn btn-success btn-block"
+            appButtonHover [highlightColor]="'#82e0aa'">
+      Felhasználó létrehozása
+    </button>
+  </form>
+  <div class="alert alert-danger" *ngIf="isSignUpFailed && f.submitted">
+    <a> <strong>{{ errorMessage }}</strong></a>
+  </div>
+</div>
